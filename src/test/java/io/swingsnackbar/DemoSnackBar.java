@@ -1,6 +1,10 @@
 package io.swingsnackbar;
 
+import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.JMarsDarkTheme;
+import mdlaf.utils.MaterialColors;
+import mdlaf.utils.MaterialImageFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +15,13 @@ public class DemoSnackBar extends JFrame {
         try {
             JDialog.setDefaultLookAndFeelDecorated(true);
             JFrame.setDefaultLookAndFeelDecorated(true);
-            UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
     }
 
     private JFrame frame = this;
-
     private JButton openSnackBar;
 
     private DemoSnackBar(){}
@@ -31,6 +34,7 @@ public class DemoSnackBar extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("@vincenzopalazzo SnackBar");
     }
 
     protected void initComponents(){
@@ -42,7 +46,11 @@ public class DemoSnackBar extends JFrame {
 
     protected void initActions(){
         openSnackBar.addActionListener(event -> {
-            SnackBar dialog = new SnackBar(frame, "Test SnackBar");
+            Icon icon = MaterialImageFactory.getInstance().getImage(
+                    GoogleMaterialDesignIcons.DELETE,
+                    MaterialColors.PURPLE_500
+            );
+            SnackBar dialog = new SnackBar(frame, "Test SnackBar", icon);
             //dialog.setContentPane(new JPanel());
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
