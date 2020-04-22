@@ -23,6 +23,7 @@ public class DemoSnackBar extends JFrame {
 
     private JFrame frame = this;
     private JButton openSnackBar;
+    private SnackBar snackBar;
 
     private DemoSnackBar(){}
 
@@ -33,6 +34,7 @@ public class DemoSnackBar extends JFrame {
         setSize(new Dimension(450, 550));
         setLocationRelativeTo(null);
         setVisible(true);
+        setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("@vincenzopalazzo SnackBar");
     }
@@ -42,18 +44,24 @@ public class DemoSnackBar extends JFrame {
 
         openSnackBar = new JButton("Open SnackBar");
         add(openSnackBar, BorderLayout.SOUTH);
+
+        Icon icon = MaterialImageFactory.getInstance().getImage(
+                GoogleMaterialDesignIcons.DELETE,
+                MaterialColors.PURPLE_500
+        );
+        setSize(new Dimension(450, 550));
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("@vincenzopalazzo SnackBar");
+        snackBar = new SnackBar(frame, "Test SnackBar", icon);
     }
 
     protected void initActions(){
         openSnackBar.addActionListener(event -> {
-            Icon icon = MaterialImageFactory.getInstance().getImage(
-                    GoogleMaterialDesignIcons.DELETE,
-                    MaterialColors.PURPLE_500
-            );
-            SnackBar dialog = new SnackBar(frame, "Test SnackBar", icon);
             //dialog.setContentPane(new JPanel());
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
+            snackBar.run();
         });
     }
 

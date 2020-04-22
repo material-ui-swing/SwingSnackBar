@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
 
 /**
  * I can add an panel with personal UI?? What do you think?
@@ -29,8 +28,10 @@ public class SnackBar extends JDialog {
 
     //TODO I can move this element inside the other component with an personal UI
     //and use the dialog only how content.
-    private JPanel content;
-    private JLabel textLabel;
+    protected JPanel content;
+    protected JLabel textLabel;
+    protected Timer timerVisibleSnack;
+    protected boolean running = false;
 
     public SnackBar(Frame owner, String textLabel, Icon icon) {
         super(owner);
@@ -77,14 +78,22 @@ public class SnackBar extends JDialog {
         setUndecorated(true);
         setFocusableWindowState(false);
         setModalityType(ModalityType.MODELESS);
+
         //setBackground(new ColorUIResource(55, 58, 60));
         //getRootPane().setBackground(new ColorUIResource(55, 58, 60));
+    }
+
+    protected void setPosition(){
+        int x =  (getOwner().getX() + ((getOwner().getWidth() - this.getWidth() ) / 2));
+        int y =  (getOwner().getY() + 30);
+        Point point = new Point(x, y);
+        setLocation(new Point(point));
     }
 
     //Component API
     public void setText(String text) {
         if (text == null || text.isEmpty()) {
-            throw new IllegalArgumentException("Invalid test");
+            throw new IllegalArgumentException("Invalid text");
         }
         textLabel.setText(text);
     }
@@ -102,5 +111,26 @@ public class SnackBar extends JDialog {
             throw new IllegalArgumentException("Border null");
         }
         this.content.setBorder(border);
+    }
+
+    public void run(){
+        if(!running){
+            running = true;
+            setPosition();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    setVisible(true);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    setVisible(false);
+                    running = false;
+                }
+            }).start();
+        }
+
     }
 }
