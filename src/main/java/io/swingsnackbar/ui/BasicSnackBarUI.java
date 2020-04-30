@@ -2,6 +2,7 @@ package io.swingsnackbar.ui;
 
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPanelUI;
 import java.awt.*;
 
@@ -12,10 +13,9 @@ public class BasicSnackBarUI extends BasicPanelUI {
 
     private static Color primary = new ColorUIResource(55, 58, 60);
 
-    private JDialog owner;
-
-    public BasicSnackBarUI(JDialog owner) {
-        this.owner = owner;
+    @SuppressWarnings({"MethodOverridesStaticMethodOfSuperclass", "UnusedDeclaration"})
+    public static ComponentUI createUI(JComponent c) {
+        return new BasicSnackBarUI();
     }
 
     @Override

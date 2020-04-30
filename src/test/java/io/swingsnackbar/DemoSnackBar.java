@@ -1,9 +1,12 @@
 package io.swingsnackbar;
 
+import javafx.scene.paint.Material;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
+import mdlaf.utils.MaterialBorders;
 import mdlaf.utils.MaterialColors;
+import mdlaf.utils.MaterialFontFactory;
 import mdlaf.utils.MaterialImageFactory;
 
 import javax.swing.*;
@@ -25,9 +28,10 @@ public class DemoSnackBar extends JFrame {
     private JButton openSnackBar;
     private SnackBar snackBar;
 
-    private DemoSnackBar(){}
+    private DemoSnackBar() {
+    }
 
-    public void initView(){
+    public void initView() {
         initComponents();
         initActions();
 
@@ -39,7 +43,7 @@ public class DemoSnackBar extends JFrame {
         setTitle("@vincenzopalazzo SnackBar");
     }
 
-    protected void initComponents(){
+    protected void initComponents() {
         setLayout(new BorderLayout());
 
         openSnackBar = new JButton("Open SnackBar");
@@ -58,10 +62,18 @@ public class DemoSnackBar extends JFrame {
         snackBar = new SnackBar(frame, "Test SnackBar", icon);
     }
 
-    protected void initActions(){
+    protected void initActions() {
         openSnackBar.addActionListener(event -> {
             //dialog.setContentPane(new JPanel());
-            snackBar.run();
+            JLabel retry = new JLabel("RETRY");
+            retry.setFont(MaterialFontFactory.getInstance().getFont(MaterialFontFactory.BOLD));
+            retry.setForeground(MaterialColors.DEEP_PURPLE_300);
+            SnackBar.doShowToast(frame,
+                    "TEST with static method and Snackbar Container",
+                    retry,
+                    SnackBar.SnackBarPosition.TOP
+            );
+            //snackBar.run();
         });
     }
 
