@@ -6,8 +6,10 @@ import io.swingsnackbar.ui.BasicSnackBarUI;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -15,14 +17,20 @@ import java.awt.geom.Rectangle2D;
  * <p>
  * Reference implementation style https://material.io/components/snackbars#
  *
+ * The api is the same to https://material.io/develop/android/components/snackbar/
  * @author https://github.com/vincenzopalazzo
  */
 public class SnackBar extends JDialog {
 
     /**
      * This variable use the personal prefix, it isn't inherited from JDialog
+     * TODO should be remove it
      */
     private static final String PREFIX_UI_MANAGER = "SnackBar.";
+    public static final int LENGTH_LONG = 8000;
+    public static final int SHORT_LONG = 5000;
+    private static final int LENGTH_INDEFINITE = -1;
+
     private static SnackBar instance;
 
     /**
@@ -50,6 +58,13 @@ public class SnackBar extends JDialog {
         instance.run(to);
     }
 
+    public static SnackBar make(JFrame contextView, String withMessage, int duration){
+        //TODO check on the value
+        SnackBar snackBar = new SnackBar(contextView, withMessage);
+        snackBar.setDuration(duration);
+        return snackBar;
+    }
+
     //TODO I can move this element inside the other component with an personal UI
     //and use the dialog only how content.
     private SnackBarContainer snackBarContainer;
@@ -58,6 +73,7 @@ public class SnackBar extends JDialog {
     protected JLabel textLabel;
     protected Timer timerVisibleSnack;
     protected boolean running = false;
+    protected int duration = LENGTH_INDEFINITE; //DEFAULT value
 
     public SnackBar(JFrame frame, String message, Icon icon) {
         this(frame, message, new JLabel(icon));
@@ -65,7 +81,7 @@ public class SnackBar extends JDialog {
 
     public SnackBar(JFrame frame, String message, JLabel icon) {
         super(frame);
-        this.snackBarContainer = new SnackBarContainer(new JLabel(message), icon);
+        this.snackBarContainer = new SnackBarContainer(this, new JLabel(message), icon);
         this.snackBarContainer.inflateContent();
         super.setContentPane(snackBarContainer);
         setModal(false);
@@ -93,15 +109,21 @@ public class SnackBar extends JDialog {
         initStyle();
     }
 
-    public SnackBar(Frame owner, String textLabel) {
-        this(owner, textLabel, null);
+    public SnackBar(JFrame frame, String message) {
+        super(frame);
+        this.snackBarContainer = new SnackBarContainer(this, new JLabel(message));
+        this.snackBarContainer.inflateContent();
+        super.setContentPane(snackBarContainer);
+        setModal(false);
+        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        initStyle();
     }
 
     /**
      * With this method you can set the style inside the component.
      * I'm thinking to move JPanel component inside an personal method and use the dialog only how container
      */
-    protected void initStyle() {
+    public void initStyle() {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -162,8 +184,34 @@ public class SnackBar extends JDialog {
         this.content.setBorder(border);
     }
 
-    public void run() {
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public SnackBar setAction(String text, MouseListener actionListener){
+        //TODO check the null value
+        this.snackBarContainer.setAction(text, actionListener);
+        return this;
+    }
+
+    public SnackBar setActionTextColor(String text, Color color, MouseListener action){
+        //TODO check the null value
+        this.snackBarContainer.setAction(text, color, action);
+        return this;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void dismiss(){
+        super.setVisible(false);
+        this.running = false;
+    }
+
+    public SnackBar run() {
         this.run(SnackBarPosition.BOTTOM);
+        return this;
     }
 
     public void run(SnackBarPosition position) {
@@ -179,8 +227,11 @@ public class SnackBar extends JDialog {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    setVisible(false);
-                    running = false;
+                    //If isn't call dismiss method
+                    if(isVisible()){
+                        setVisible(false);
+                        running = false;
+                    }
                 }
             }).start();
         }

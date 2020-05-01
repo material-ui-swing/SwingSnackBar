@@ -1,5 +1,6 @@
 package io.swingsnackbar.ui;
 
+
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.ComponentUI;
@@ -23,7 +24,6 @@ public class BasicSnackBarUI extends BasicPanelUI {
         super.installUI(c);
         c.setBackground(primary);
         c.setBorder(new RoundedCornerBorder(primary, 7));
-
     }
 
     @Override

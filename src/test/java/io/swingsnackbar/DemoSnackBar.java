@@ -11,6 +11,8 @@ import mdlaf.utils.MaterialImageFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class DemoSnackBar extends JFrame {
 
@@ -28,8 +30,7 @@ public class DemoSnackBar extends JFrame {
     private JButton openSnackBar;
     private SnackBar snackBar;
 
-    private DemoSnackBar() {
-    }
+    private DemoSnackBar() {}
 
     public void initView() {
         initComponents();
@@ -65,14 +66,45 @@ public class DemoSnackBar extends JFrame {
     protected void initActions() {
         openSnackBar.addActionListener(event -> {
             //dialog.setContentPane(new JPanel());
-            JLabel retry = new JLabel("RETRY");
+          /*  JLabel retry = new JLabel("RETRY");
             retry.setFont(MaterialFontFactory.getInstance().getFont(MaterialFontFactory.BOLD));
             retry.setForeground(MaterialColors.DEEP_PURPLE_300);
             SnackBar.doShowToast(frame,
                     "TEST with static method and Snackbar Container",
                     retry,
                     SnackBar.SnackBarPosition.TOP
-            );
+            );*/
+            if(snackBar != null && !snackBar.isRunning()){
+                snackBar = SnackBar.make(frame, "Android API", SnackBar.LENGTH_LONG)
+                        .setAction("DELETE", new MouseListener(){
+
+                                    @Override
+                                    public void mouseClicked(MouseEvent e) {
+
+                                    }
+
+                                    @Override
+                                    public void mousePressed(MouseEvent e) {
+                                        System.out.println("CLICK on ICON");
+                                    }
+
+                                    @Override
+                                    public void mouseReleased(MouseEvent e) {
+
+                                    }
+
+                                    @Override
+                                    public void mouseEntered(MouseEvent e) {
+
+                                    }
+
+                                    @Override
+                                    public void mouseExited(MouseEvent e) {
+
+                                    }
+                                }
+                        ).run();
+            }
             //snackBar.run();
         });
     }

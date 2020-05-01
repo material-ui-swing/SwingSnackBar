@@ -41,7 +41,7 @@ class RoundedCornerBorder extends AbstractBorder {
     protected float withBorder = 1.2f;
 
     public RoundedCornerBorder() {
-        colorLine =new ColorUIResource(55, 58, 60);;
+        colorLine = new ColorUIResource(55, 58, 60);;
     }
 
     public RoundedCornerBorder(Color colorLine) {
