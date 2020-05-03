@@ -6,7 +6,6 @@ import sun.swing.SwingUtilities2;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
 /**
@@ -102,7 +101,6 @@ public class SnackBarContainer extends JPanel {
     }
 
     public void setAction(String text, MouseListener action) {
-        //TODO check the null value
         if(this.snackBarIcon == null){
             this.snackBarIcon = new JLabel();
             super.add(snackBarIcon, BorderLayout.EAST);
@@ -121,5 +119,30 @@ public class SnackBarContainer extends JPanel {
         this.snackBarIcon.setText(text);
         this.snackBarIcon.setForeground(color);
         this.snackBarIcon.addMouseListener(action);
+    }
+
+    public void setAction(Icon icon, MouseListener action) {
+        if(this.snackBarIcon == null){
+            this.snackBarIcon = new JLabel();
+            super.add(snackBarIcon, BorderLayout.EAST);
+            this.snackBar.initStyle();
+            this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
+        }
+        this.snackBarIcon.setIcon(icon);
+        this.snackBarIcon.addMouseListener(action);
+    }
+
+    public void setIcon(Icon icon) {
+        if(this.snackBarIcon == null){
+            this.snackBarIcon = new JLabel();
+            super.add(snackBarIcon, BorderLayout.EAST);
+            this.snackBar.initStyle();
+            this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
+        }
+        this.snackBarIcon.setIcon(icon);
+    }
+
+    public void setText(String text) {
+        this.snackBarText.setText(text);
     }
 }

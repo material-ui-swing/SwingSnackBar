@@ -9,7 +9,11 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     `java-library`
+    `maven-publish`
 }
+
+group = "io.github.vincenzopalazzo"
+version = "0.0.1"
 
 repositories {
     // Use jcenter for resolving dependencies.

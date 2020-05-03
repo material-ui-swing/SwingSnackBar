@@ -1,12 +1,10 @@
 package io.swingsnackbar;
 
 import io.swingsnackbar.model.SnackBarContainer;
-import io.swingsnackbar.ui.BasicSnackBarUI;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseListener;
@@ -22,41 +20,9 @@ import java.awt.geom.Rectangle2D;
  */
 public class SnackBar extends JDialog {
 
-    /**
-     * This variable use the personal prefix, it isn't inherited from JDialog
-     * TODO should be remove it
-     */
-    private static final String PREFIX_UI_MANAGER = "SnackBar.";
     public static final int LENGTH_LONG = 8000;
     public static final int SHORT_LONG = 5000;
     private static final int LENGTH_INDEFINITE = -1;
-
-    private static SnackBar instance;
-
-    /**
-     * Only test
-     * param withFrame
-     * param withMessage
-     */
-    public static void doShowToast(JFrame withFrame, String withMessage, Icon withIcon, SnackBarPosition to) {
-        if (withFrame == null || (withMessage == null || withMessage.isEmpty())) {
-            throw new IllegalArgumentException("TODO complex message, for the moment the function arguments are null");
-        }
-        if (instance == null) {
-            instance = new SnackBar(withFrame, withMessage, withIcon);
-        }
-        instance.run(to);
-    }
-
-    public static void doShowToast(JFrame withFrame, String withMessage, JLabel withIcon, SnackBarPosition to) {
-        if (withFrame == null || (withMessage == null || withMessage.isEmpty())) {
-            throw new IllegalArgumentException("TODO complex message, for the moment the function arguments are null");
-        }
-        if (instance == null) {
-            instance = new SnackBar(withFrame, withMessage, withIcon);
-        }
-        instance.run(to);
-    }
 
     public static SnackBar make(JFrame contextView, String withMessage, int duration){
         //TODO check on the value
@@ -65,15 +31,10 @@ public class SnackBar extends JDialog {
         return snackBar;
     }
 
-    //TODO I can move this element inside the other component with an personal UI
-    //and use the dialog only how content.
     private SnackBarContainer snackBarContainer;
-
-    protected JPanel content;
-    protected JLabel textLabel;
-    protected Timer timerVisibleSnack;
     protected boolean running = false;
     protected int duration = LENGTH_INDEFINITE; //DEFAULT value
+    protected SnackBarPosition position = SnackBarPosition.BOTTOM; //Default value
 
     public SnackBar(JFrame frame, String message, Icon icon) {
         this(frame, message, new JLabel(icon));
@@ -89,25 +50,6 @@ public class SnackBar extends JDialog {
         initStyle();
     }
 
-    public SnackBar(Frame owner, String textLabel, Icon icon) {
-        super(owner);
-        this.content = new JPanel();
-        this.content.setUI(new BasicSnackBarUI());
-        this.content.setLayout(new BorderLayout());
-        if (textLabel != null && !textLabel.isEmpty()) {
-            this.textLabel = new JLabel(textLabel);
-            if (icon != null) {
-                this.textLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-                this.setIcon(icon);
-            }
-            this.content.add(this.textLabel);
-
-        }
-        setContentPane(content);
-        setModal(false);
-        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
-        initStyle();
-    }
 
     public SnackBar(JFrame frame, String message) {
         super(frame);
@@ -145,13 +87,49 @@ public class SnackBar extends JDialog {
         //getRootPane().setBackground(new ColorUIResource(55, 58, 60));
     }
 
-    protected void setPosition(SnackBarPosition position) {
+    protected void doCalculatePosition() {
         int x;
         int y;
-        switch(position){
+        switch(this.position){
             case TOP:
                 x = (getOwner().getX() + ((getOwner().getWidth() - this.getWidth()) / 2));
                 y = (getOwner().getY() + 30);
+                break;
+            case TOP_LEFT:
+                if(isPossibleWith()) {
+                    x = (getOwner().getWidth() - 350);
+                    y = (getOwner().getY() + 30);
+                }else{
+                    x = (getOwner().getX() + ((getOwner().getWidth() - this.getWidth()) / 2));
+                    y = (getOwner().getY() + getOwner().getHeight() - 100);
+                }
+                break;
+            case TOP_RIGHT:
+                if(isPossibleWith()) {
+                    x = (getOwner().getX() + 10);
+                    y = (getOwner().getY() + 30);
+                }else{
+                    x = (getOwner().getX() + ((getOwner().getWidth() - this.getWidth()) / 2));
+                    y = (getOwner().getY() + getOwner().getHeight() - 100);
+                }
+                break;
+            case BOTTOM_LEFT:
+                if(isPossibleWith()) {
+                    x = (getOwner().getWidth() - 350);
+                    y = (getOwner().getHeight() - 85);
+                }else{
+                    x = (getOwner().getX() + ((getOwner().getWidth() - this.getWidth()) / 2));
+                    y = (getOwner().getY() + getOwner().getHeight() - 100);
+                }
+                break;
+            case BOTTOM_RIGHT:
+                if(isPossibleWith()) {
+                    x = (getOwner().getX() + 10);
+                    y = (getOwner().getHeight() - 85);
+                }else{
+                    x = (getOwner().getX() + ((getOwner().getWidth() - this.getWidth()) / 2));
+                    y = (getOwner().getY() + getOwner().getHeight() - 100);
+                }
                 break;
             default:
                 x = (getOwner().getX() + ((getOwner().getWidth() - this.getWidth()) / 2));
@@ -161,44 +139,92 @@ public class SnackBar extends JDialog {
         super.setLocation(point);
     }
 
+    private boolean isPossibleWith() {
+        System.out.println("Root wight: " + getOwner().getWidth());
+        System.out.println("SnackBar wight: " + this.getWidth() * 2);
+        return getOwner().getWidth() > (this.getWidth() * 2);
+    }
+
     //Component API
-    public void setText(String text) {
+    public SnackBar setText(String text) {
         if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException("Invalid text");
         }
-        textLabel.setText(text);
+        this.snackBarContainer.setText(text);
+        return this;
     }
 
-    public void setIcon(Icon icon) {
+    public SnackBar setIcon(Icon icon) {
         if (icon == null) {
             throw new IllegalArgumentException("Invalid icon");
         }
-        textLabel.setIconTextGap(15);
-        textLabel.setIcon(icon);
+        this.snackBarContainer.setIcon(icon);
+        return this;
     }
 
-    public void setBorder(Border border) {
+    public SnackBar setBorder(Border border) {
         if (border == null) {
             throw new IllegalArgumentException("Border null");
         }
-        this.content.setBorder(border);
+        this.snackBarContainer.setBorder(border);
+        return this;
     }
 
-    public void setDuration(int duration) {
+    public SnackBar setDuration(int duration) {
         this.duration = duration;
+        return this;
     }
 
-    public SnackBar setAction(String text, MouseListener actionListener){
-        //TODO check the null value
-        this.snackBarContainer.setAction(text, actionListener);
+    public SnackBar setAction(String text, MouseListener action){
+        boolean textIsInvalid = (text == null || text.isEmpty());
+        boolean actionIsNull = (action == null);
+        boolean areInsecure =  textIsInvalid || actionIsNull;
+        if(areInsecure){
+            String message = "\n";
+            if(textIsInvalid) message += "- Text null.\n";
+            if(actionIsNull)  message +="- Action is null\n";
+            throw new IllegalArgumentException(message);
+        }
+        this.snackBarContainer.setAction(text, action);
         return this;
     }
 
     public SnackBar setActionTextColor(String text, Color color, MouseListener action){
-        //TODO check the null value
+        boolean textIsInvalid = (text == null || text.isEmpty());
+        boolean colorIsNull = (color == null);
+        boolean actionIsNull = (action == null);
+        boolean areInsecure =  textIsInvalid || colorIsNull || actionIsNull;
+        if(areInsecure){
+            String message = "\n";
+            if(textIsInvalid) message += "- Text null.\n";
+            if(colorIsNull)  message +="- Color is null\n";
+            if(actionIsNull)  message +="- Action is null\n";
+            throw new IllegalArgumentException(message);
+        }
         this.snackBarContainer.setAction(text, color, action);
         return this;
     }
+
+    public SnackBar setAction(Icon icon, MouseListener action){
+        boolean iconIsNull = (icon == null);
+        boolean actionIsNull = (action == null);
+        boolean areInsecure =  iconIsNull || actionIsNull;
+        if(areInsecure){
+            String message = "\n";
+            if(iconIsNull) message += "- Icon is null.\n";
+            if(actionIsNull)  message +="- Action is null\n";
+            throw new IllegalArgumentException(message);
+        }
+        this.snackBarContainer.setAction(icon, action);
+        return this;
+    }
+
+    public SnackBar setPosition(SnackBarPosition position){
+        this.position = position;
+        this.doCalculatePosition();
+        return this;
+    }
+
 
     public boolean isRunning() {
         return running;
@@ -217,17 +243,18 @@ public class SnackBar extends JDialog {
     public void run(SnackBarPosition position) {
         if (!running) {
             running = true;
-            setPosition(position);
+            this.position = position;
+            doCalculatePosition();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     setVisible(true);
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(duration);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    //If isn't call dismiss method
+                    //If isn't call dismiss method before to end
                     if(isVisible()){
                         setVisible(false);
                         running = false;

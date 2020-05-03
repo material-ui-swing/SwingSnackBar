@@ -1,14 +1,10 @@
 package io.swingsnackbar;
 
-import javafx.scene.paint.Material;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
-import mdlaf.utils.MaterialBorders;
 import mdlaf.utils.MaterialColors;
-import mdlaf.utils.MaterialFontFactory;
 import mdlaf.utils.MaterialImageFactory;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -30,7 +26,8 @@ public class DemoSnackBar extends JFrame {
     private JButton openSnackBar;
     private SnackBar snackBar;
 
-    private DemoSnackBar() {}
+    private DemoSnackBar() {
+    }
 
     public void initView() {
         initComponents();
@@ -74,9 +71,9 @@ public class DemoSnackBar extends JFrame {
                     retry,
                     SnackBar.SnackBarPosition.TOP
             );*/
-            if(snackBar != null && !snackBar.isRunning()){
-                snackBar = SnackBar.make(frame, "Android API", SnackBar.LENGTH_LONG)
-                        .setAction("DELETE", new MouseListener(){
+            if (snackBar != null && !snackBar.isRunning()) {
+                snackBar = SnackBar.make(frame, "Do you want open another Snackbar?", SnackBar.LENGTH_LONG)
+                        .setAction("OPEN", new MouseListener() {
 
                                     @Override
                                     public void mouseClicked(MouseEvent e) {
@@ -85,7 +82,12 @@ public class DemoSnackBar extends JFrame {
 
                                     @Override
                                     public void mousePressed(MouseEvent e) {
-                                        System.out.println("CLICK on ICON");
+                                        SnackBar.make(frame, "Second snackbar opened", SnackBar.SHORT_LONG)
+                                                .setIcon(MaterialImageFactory.getInstance().getImage(
+                                                        GoogleMaterialDesignIcons.DONE,
+                                                        MaterialColors.COSMO_GREEN
+                                                        )
+                                                ).run(SnackBar.SnackBarPosition.BOTTOM_RIGHT);
                                     }
 
                                     @Override
