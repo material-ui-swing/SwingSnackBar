@@ -105,6 +105,7 @@ public class SnackBarContainer extends JPanel {
             this.snackBarIcon = new JLabel();
             super.add(snackBarIcon, BorderLayout.EAST);
             this.snackBar.initStyle();
+            super.updateUI();
         }
         this.snackBarIcon.setText(text);
         this.snackBarIcon.addMouseListener(action);
@@ -127,6 +128,7 @@ public class SnackBarContainer extends JPanel {
             super.add(snackBarIcon, BorderLayout.EAST);
             this.snackBar.initStyle();
             this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
+            super.updateUI();
         }
         this.snackBarIcon.setIcon(icon);
         this.snackBarIcon.addMouseListener(action);
@@ -138,11 +140,31 @@ public class SnackBarContainer extends JPanel {
             super.add(snackBarIcon, BorderLayout.EAST);
             this.snackBar.initStyle();
             this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
+            super.updateUI();
         }
         this.snackBarIcon.setIcon(icon);
     }
 
     public void setText(String text) {
         this.snackBarText.setText(text);
+    }
+
+    //getter and setter
+
+    @Override
+    public String getUIClassID() {
+        return uiClassID;
+    }
+
+    public JLabel getSnackBarText() {
+        return snackBarText;
+    }
+
+    public JLabel getSnackBarIcon() {
+        return snackBarIcon;
+    }
+
+    public SnackBar getSnackBar() {
+        return snackBar;
     }
 }

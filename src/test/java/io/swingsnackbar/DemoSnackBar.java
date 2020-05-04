@@ -1,5 +1,6 @@
 package io.swingsnackbar;
 
+import io.swingsnackbar.ui.BasicSnackBarUI;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.JMarsDarkTheme;
@@ -14,6 +15,7 @@ public class DemoSnackBar extends JFrame {
 
     static {
         try {
+            UIManager.put("SnackBarUI", BasicSnackBarUI.class.getCanonicalName());
             JDialog.setDefaultLookAndFeelDecorated(true);
             JFrame.setDefaultLookAndFeelDecorated(true);
             UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));
