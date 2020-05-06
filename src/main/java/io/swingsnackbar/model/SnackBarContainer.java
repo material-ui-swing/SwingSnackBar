@@ -1,12 +1,12 @@
 package io.swingsnackbar.model;
 
+import io.swingsnackbar.action.AbstractSnackBarAction;
 import io.swingsnackbar.SnackBar;
-import io.swingsnackbar.ui.BasicSnackBarUI;
-import sun.swing.SwingUtilities2;
+import io.swingsnackbar.view.BasicSnackBarUI;
 
 import javax.swing.*;
+import javax.swing.plaf.PanelUI;
 import java.awt.*;
-import java.awt.event.MouseListener;
 
 /**
  * @author https://github.com/vincenzopalazzo
@@ -21,6 +21,7 @@ public class SnackBarContainer extends JPanel {
     protected JLabel snackBarText;
     protected JLabel snackBarIcon;
     protected SnackBar snackBar;
+    protected int gap = 30;
 
     private SnackBarContainer(SnackBar snackBar) {
         super(new BorderLayout());
@@ -58,12 +59,22 @@ public class SnackBarContainer extends JPanel {
         this.snackBarText = snackBarText;
     }
 
+    @Override
+    public void updateUI() {
+        if (UIManager.get(getUIClassID()) != null) {
+            PanelUI ui = (PanelUI) UIManager.getUI(this);
+            setUI(ui);
+        } else {
+            PanelUI ui = new BasicSnackBarUI();
+            setUI(ui);
+        }
+    }
+
     /**
      * This was call only inside the component SnackBar, to set the style inside the component
      * param owner
      */
     public void inflateContent() {
-        super.setUI(new BasicSnackBarUI()); // TODO make the possibility to set this inside the UIManager
         super.add(snackBarText, BorderLayout.WEST);
         if(snackBarIcon != null){
             super.add(snackBarIcon, BorderLayout.EAST);
@@ -72,65 +83,36 @@ public class SnackBarContainer extends JPanel {
     }
 
 
-    /**
-     * TODO make a java wrapper for the swingUtilites2
-     */
     public Dimension getDimension() {
         int width;
         if (this.snackBarIcon != null && snackBarIcon.getIcon() != null) {
-            width = SwingUtilities2.stringWidth(snackBarText,
-                    this.snackBarText.getFontMetrics(this.snackBarText.getFont()),
-                    this.snackBarText.getText()
-            ) + this.snackBarIcon.getIcon().getIconWidth();
+            width = this.snackBarText.getFontMetrics(
+                    this.snackBarText.getFont()).stringWidth(this.snackBarText.getText())
+                    + this.snackBarIcon.getIcon().getIconWidth();
         } else {
             this.snackBarText.setHorizontalTextPosition(SwingConstants.CENTER);
-            width = SwingUtilities2.stringWidth(snackBarText,
-                    this.snackBarText.getFontMetrics(this.snackBarText.getFont()),
-                    this.snackBarText.getText()
-            );
+            width = this.snackBarText.getFontMetrics(
+                    this.snackBarText.getFont()).stringWidth(this.snackBarText.getText());
             if(this.snackBarIcon != null){
                 this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
-                width += SwingUtilities2.stringWidth(snackBarIcon,
-                        this.snackBarIcon.getFontMetrics(this.snackBarIcon.getFont()),
-                        this.snackBarIcon.getText()
-                );
+                width = this.snackBarText.getFontMetrics(
+                        this.snackBarText.getFont()).stringWidth(this.snackBarText.getText());
+                width += (this.snackBarIcon.getText() != null
+                        ? this.snackBarIcon.getText().length() * 8
+                        : 10);
             }
         }
-        width += 150; //gap
+        width += gap;
         return new Dimension(width, 50);
     }
 
-    public void setAction(String text, MouseListener action) {
+    public void setAction(AbstractSnackBarAction action) {
         if(this.snackBarIcon == null){
             this.snackBarIcon = new JLabel();
             super.add(snackBarIcon, BorderLayout.EAST);
             this.snackBar.initStyle();
-            super.updateUI();
+            this.updateUI();
         }
-        this.snackBarIcon.setText(text);
-        this.snackBarIcon.addMouseListener(action);
-    }
-
-    public void setAction(String text, Color color, MouseListener action){
-        if(this.snackBarIcon == null){
-            this.snackBarIcon = new JLabel();
-            super.add(snackBarIcon, BorderLayout.EAST);
-            this.snackBar.initStyle();
-        }
-        this.snackBarIcon.setText(text);
-        this.snackBarIcon.setForeground(color);
-        this.snackBarIcon.addMouseListener(action);
-    }
-
-    public void setAction(Icon icon, MouseListener action) {
-        if(this.snackBarIcon == null){
-            this.snackBarIcon = new JLabel();
-            super.add(snackBarIcon, BorderLayout.EAST);
-            this.snackBar.initStyle();
-            this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
-            super.updateUI();
-        }
-        this.snackBarIcon.setIcon(icon);
         this.snackBarIcon.addMouseListener(action);
     }
 
@@ -140,17 +122,33 @@ public class SnackBarContainer extends JPanel {
             super.add(snackBarIcon, BorderLayout.EAST);
             this.snackBar.initStyle();
             this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
-            super.updateUI();
+            this.updateUI();
         }
         this.snackBarIcon.setIcon(icon);
+    }
+
+    public void setGap(int gap){
+        this.gap = gap;
+        this.snackBar.revalidate();
     }
 
     public void setText(String text) {
         this.snackBarText.setText(text);
     }
 
-    //getter and setter
+    public void setIconTextColor(Color color){
+        if(snackBarIcon.getIcon() == null){
+            this.snackBarIcon.setForeground(color);
+        }
+    }
 
+    public void setIconTextStyle(Font font) {
+        if(snackBarIcon.getIcon() == null){
+            this.snackBarIcon.setFont(font);
+        }
+    }
+
+    //getter and setter
     @Override
     public String getUIClassID() {
         return uiClassID;

@@ -1,8 +1,8 @@
-package io.swingsnackbar.ui;
+package io.swingsnackbar.view;
 
 
+import io.swingsnackbar.SnackBar;
 import io.swingsnackbar.model.SnackBarContainer;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.BorderUIResource;
@@ -19,7 +19,7 @@ public class BasicSnackBarUI extends BasicPanelUI {
     private static final Color DEFAULT_BACKGROUND = new ColorUIResource(55, 58, 60);
     private static final Color DEFAULT_FOREGROUND = new ColorUIResource(248, 249, 250);
     private static final Color DEFAULT_COLOR_ICON = new ColorUIResource(255, 117, 24);
-    protected static final Border DEFAULT_CONTENT_BORDER = new BorderUIResource(new RoundedCornerBorder(DEFAULT_BACKGROUND, 7));
+    protected static final Border DEFAULT_CONTENT_BORDER = new BorderUIResource(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
     private static final String PREFIX = "SnackBar";
 
@@ -33,6 +33,8 @@ public class BasicSnackBarUI extends BasicPanelUI {
     protected Color colorIconOrText;
     protected Font fontIconOrText;
     protected Border borderContent;
+    protected SnackBarContainer container;
+    protected SnackBar snackBar;
 
 
     @Override
@@ -40,7 +42,8 @@ public class BasicSnackBarUI extends BasicPanelUI {
         super.installUI(c);
 
         if (c instanceof SnackBarContainer) {
-            SnackBarContainer container = (SnackBarContainer) c;
+            this.container = (SnackBarContainer) c;
+            this.snackBar = this.container.getSnackBar();
             JLabel icon = container.getSnackBarIcon();
             if (icon != null && icon.getIcon() == null) {
                 icon.setForeground(this.colorIconOrText);

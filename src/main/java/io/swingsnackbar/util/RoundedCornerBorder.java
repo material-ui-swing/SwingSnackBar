@@ -1,4 +1,4 @@
-package io.swingsnackbar.ui;
+package io.swingsnackbar.util;
 /**
  * MIT License
  *
@@ -34,7 +34,7 @@ import java.util.Objects;
 /**
  * @author https://github.com/vincenzopalazzo
  */
-class RoundedCornerBorder extends AbstractBorder {
+public class RoundedCornerBorder extends AbstractBorder {
 
     protected  int arch = 12; //default value
     protected Color colorLine;

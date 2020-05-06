@@ -1,15 +1,16 @@
 package io.swingsnackbar;
 
-import io.swingsnackbar.ui.BasicSnackBarUI;
+import io.swingsnackbar.action.AbstractSnackBarAction;
+import io.swingsnackbar.view.BasicSnackBarUI;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import mdlaf.MaterialLookAndFeel;
-import mdlaf.themes.JMarsDarkTheme;
+import mdlaf.themes.MaterialLiteTheme;
 import mdlaf.utils.MaterialColors;
+import mdlaf.utils.MaterialFontFactory;
 import mdlaf.utils.MaterialImageFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class DemoSnackBar extends JFrame {
 
@@ -18,7 +19,8 @@ public class DemoSnackBar extends JFrame {
             UIManager.put("SnackBarUI", BasicSnackBarUI.class.getCanonicalName());
             JDialog.setDefaultLookAndFeelDecorated(true);
             JFrame.setDefaultLookAndFeelDecorated(true);
-            UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));
+            UIManager.put("SnackBar.arc", 5);
+            UIManager.setLookAndFeel(new MaterialLookAndFeel(new MaterialLiteTheme()));
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
@@ -64,49 +66,27 @@ public class DemoSnackBar extends JFrame {
 
     protected void initActions() {
         openSnackBar.addActionListener(event -> {
-            //dialog.setContentPane(new JPanel());
-          /*  JLabel retry = new JLabel("RETRY");
-            retry.setFont(MaterialFontFactory.getInstance().getFont(MaterialFontFactory.BOLD));
-            retry.setForeground(MaterialColors.DEEP_PURPLE_300);
-            SnackBar.doShowToast(frame,
-                    "TEST with static method and Snackbar Container",
-                    retry,
-                    SnackBar.SnackBarPosition.TOP
-            );*/
             if (snackBar != null && !snackBar.isRunning()) {
-                snackBar = SnackBar.make(frame, "Do you want open another Snackbar?", SnackBar.LENGTH_LONG)
-                        .setAction("OPEN", new MouseListener() {
-
-                                    @Override
-                                    public void mouseClicked(MouseEvent e) {
-
-                                    }
-
-                                    @Override
-                                    public void mousePressed(MouseEvent e) {
-                                        SnackBar.make(frame, "Second snackbar opened", SnackBar.SHORT_LONG)
-                                                .setIcon(MaterialImageFactory.getInstance().getImage(
-                                                        GoogleMaterialDesignIcons.DONE,
-                                                        MaterialColors.COSMO_GREEN
-                                                        )
-                                                ).run(SnackBar.SnackBarPosition.BOTTOM_RIGHT);
-                                    }
-
-                                    @Override
-                                    public void mouseReleased(MouseEvent e) {
-
-                                    }
-
-                                    @Override
-                                    public void mouseEntered(MouseEvent e) {
-
-                                    }
-
-                                    @Override
-                                    public void mouseExited(MouseEvent e) {
-
-                                    }
-                                }
+                snackBar = SnackBar.make(frame, "Do you want open another Snackbar?", "OPEN")
+                        .setMarginBottom(0)
+                        .setGap(50)
+                        .setPosition(SnackBar.TOP_LEFT)
+                        .setIconTextColor(MaterialColors.COSMO_STRONG_BLUE)
+                        .setSnackBarBackground(MaterialColors.COSMO_DARK_GRAY)
+                        .setSnackBarForeground(MaterialColors.COSMO_BLACK)
+                        .setIconTextStyle(MaterialFontFactory.getInstance().getFont(MaterialFontFactory.BOLD))
+                        .setDuration(SnackBar.LENGTH_SHORT)
+                        .setAction(new AbstractSnackBarAction() {
+                                       @Override
+                                       public void mousePressed(MouseEvent e) {
+                                           Icon icon = MaterialImageFactory.getInstance().getImage(
+                                                   GoogleMaterialDesignIcons.DONE,
+                                                   MaterialColors.COSMO_GREEN);
+                                           SnackBar.make(frame, "Second snackbar opened", icon)
+                                                   .setDuration(SnackBar.LENGTH_SHORT)
+                                                   .run(SnackBar.BOTTOM);
+                                       }
+                                   }
                         ).run();
             }
             //snackBar.run();
@@ -122,5 +102,4 @@ public class DemoSnackBar extends JFrame {
             }
         });
     }
-
 }
