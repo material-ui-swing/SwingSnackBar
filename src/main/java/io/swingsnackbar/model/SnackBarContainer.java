@@ -35,6 +35,7 @@ public class SnackBarContainer extends JPanel {
         }
         this.snackBarText = snackBarText;
         this.snackBarIcon = snackBarIcon;
+        this.updateUI();
     }
 
     public SnackBarContainer(SnackBar snackBar, JLabel snackBarText, Icon snackBarIcon) {
@@ -49,6 +50,7 @@ public class SnackBarContainer extends JPanel {
             this.snackBarIcon.setHorizontalTextPosition(SwingConstants.RIGHT);
             this.snackBarIcon.setIcon(snackBarIcon);
         }
+        this.updateUI();
     }
 
     public SnackBarContainer(SnackBar snackBar, JLabel snackBarText) {
@@ -57,10 +59,12 @@ public class SnackBarContainer extends JPanel {
             throw new IllegalArgumentException("TODO complex message, for the moment the function arguments are null");
         }
         this.snackBarText = snackBarText;
+        this.updateUI();
     }
 
     @Override
     public void updateUI() {
+        if(snackBarText == null) return;
         if (UIManager.get(getUIClassID()) != null) {
             PanelUI ui = (PanelUI) UIManager.getUI(this);
             setUI(ui);

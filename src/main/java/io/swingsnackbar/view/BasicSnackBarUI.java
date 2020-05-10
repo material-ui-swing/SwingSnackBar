@@ -48,6 +48,8 @@ public class BasicSnackBarUI extends BasicPanelUI {
             if (icon != null && icon.getIcon() == null) {
                 icon.setForeground(this.colorIconOrText);
                 icon.setFont(this.fontIconOrText);
+            }else if (icon != null && icon.getIcon() != null){
+                icon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
             if (container.getSnackBarText() != null) {
                 container.getSnackBarText().setBackground(this.background);
@@ -66,9 +68,9 @@ public class BasicSnackBarUI extends BasicPanelUI {
                 UIManager.get(getPrefix() + ".border") != null) {
             LookAndFeel.installColors(p, getPrefix() + ".background", getPrefix() + ".foreground");
             LookAndFeel.installBorder(p, getPrefix() + ".border");
-            background = null;
-            foreground = null;
-            borderContent = null;
+            background = UIManager.getColor(getPrefix() + ".background");
+            foreground = UIManager.getColor(getPrefix() + ".foreground");
+            borderContent = UIManager.getBorder(getPrefix() + ".border");
         }
         background = (background == null) ? DEFAULT_BACKGROUND : background;
         foreground = (foreground == null) ? DEFAULT_FOREGROUND : foreground;

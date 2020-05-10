@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.vincenzopalazzo"
-version = "0.0.1"
+version = "0.0.2"
 
 repositories {
     // Use jcenter for resolving dependencies.
@@ -22,5 +22,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("io.github.vincenzopalazzo:material-ui-swing:1.1.1_pre-release_6.1")
+    //implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.1-rc2")
+    implementation(files("$projectDir/devlib/LinkLabelUI.jar"))
+    implementation(files("$projectDir/devlib/material-ui-swing-1.1.1-rc3.jar"))
 }

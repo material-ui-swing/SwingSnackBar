@@ -1,5 +1,6 @@
 package io.swingsnackbar;
 
+import io.linklabelui.model.LinkLabel;
 import io.swingsnackbar.action.AbstractSnackBarAction;
 import io.swingsnackbar.view.BasicSnackBarUI;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
@@ -9,6 +10,7 @@ import mdlaf.utils.MaterialColors;
 import mdlaf.utils.MaterialFontFactory;
 import mdlaf.utils.MaterialImageFactory;
 import javax.swing.*;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -20,6 +22,11 @@ public class DemoSnackBar extends JFrame {
             JDialog.setDefaultLookAndFeelDecorated(true);
             JFrame.setDefaultLookAndFeelDecorated(true);
             UIManager.put("SnackBar.arc", 5);
+            UIManager.put("SnackBar.background", MaterialColors.COSMO_LIGTH_GRAY);
+            UIManager.put("SnackBar.foreground", MaterialColors.RED_400);
+            UIManager.put("SnackBar.border", new BorderUIResource(BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+            UIManager.put("LinkLabel.foreground",  MaterialColors.COSMO_STRONG_BLUE);
+            UIManager.put("LinkLabel.mouseHoverColor",  MaterialColors.COSMO_BLUE);
             UIManager.setLookAndFeel(new MaterialLookAndFeel(new MaterialLiteTheme()));
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
@@ -47,7 +54,7 @@ public class DemoSnackBar extends JFrame {
 
     protected void initComponents() {
         setLayout(new BorderLayout());
-
+        add(new JToggleButton());
         openSnackBar = new JButton("Open SnackBar");
         add(openSnackBar, BorderLayout.SOUTH);
 
@@ -67,13 +74,13 @@ public class DemoSnackBar extends JFrame {
     protected void initActions() {
         openSnackBar.addActionListener(event -> {
             if (snackBar != null && !snackBar.isRunning()) {
-                snackBar = SnackBar.make(frame, "Do you want open another Snackbar?", "OPEN")
+                snackBar = SnackBar.make(frame, "Do you want open another Snackbar?", new LinkLabel("OPEN", "#"))
                         .setMarginBottom(0)
                         .setGap(50)
                         .setPosition(SnackBar.TOP_LEFT)
                         .setIconTextColor(MaterialColors.COSMO_STRONG_BLUE)
-                        .setSnackBarBackground(MaterialColors.COSMO_DARK_GRAY)
-                        .setSnackBarForeground(MaterialColors.COSMO_BLACK)
+                       // .setSnackBarBackground(MaterialColors.COSMO_DARK_GRAY)
+                        //.setSnackBarForeground(MaterialColors.COSMO_BLACK)
                         .setIconTextStyle(MaterialFontFactory.getInstance().getFont(MaterialFontFactory.BOLD))
                         .setDuration(SnackBar.LENGTH_SHORT)
                         .setAction(new AbstractSnackBarAction() {

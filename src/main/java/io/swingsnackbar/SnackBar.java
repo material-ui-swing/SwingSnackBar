@@ -53,6 +53,26 @@ public class SnackBar extends JDialog {
         return new SnackBar(contextView, withMessage, iconText);
     }
 
+    public static SnackBar make(Window contextView, String withMessage, JLabel labelWithIconOrText) {
+        if(contextView == null || (withMessage == null || withMessage.isEmpty())){
+            String message = "\n";
+            if(contextView == null){
+                message = "- Context View null, this propriety should be an instance of Window swing component\n";
+            }
+            if((withMessage == null || withMessage.isEmpty())){
+                if(withMessage == null){
+                    message = "- The message is null, this propriety should be contains any " +
+                            "text because is the text content inside the Snackbar\n";
+                }else{
+                    message = "- The message is empty, this propriety should be contains any " +
+                            "text because is the text content inside the Snackbar\n";
+                }
+            }
+            throw new IllegalArgumentException(message);
+        }
+        return new SnackBar(contextView, withMessage, labelWithIconOrText);
+    }
+
     public static SnackBar make(Window contextView, String withMessage, Icon icon) {
         if(contextView == null || (withMessage == null || withMessage.isEmpty())){
             String message = "\n";
@@ -81,6 +101,7 @@ public class SnackBar extends JDialog {
     protected int marginBottom = 25;
     protected int marginLeft = 25;
     protected int marginRight = 25;
+    protected Timer showTimer;
 
     public SnackBar(Window frame, String message, Icon icon) {
         this(frame, message, new JLabel(icon));
@@ -194,8 +215,8 @@ public class SnackBar extends JDialog {
     }
 
     protected boolean isPossibleWith() {
-        System.out.println("Root wight: " + getOwner().getWidth());
-        System.out.println("SnackBar wight: " + this.getWidth() * 2);
+        //System.out.println("Root wight: " + getOwner().getWidth());
+        //System.out.println("SnackBar wight: " + this.getWidth() * 2);
         return getOwner().getWidth() > (this.getWidth() * 2);
     }
 
@@ -254,11 +275,15 @@ public class SnackBar extends JDialog {
     }
 
     public SnackBar setAction(AbstractSnackBarAction action) {
-        boolean actionIsNull = (action == null);
         if (action == null) {
             throw new IllegalArgumentException("- Action is null\n");
         }
         this.snackBarContainer.setAction(action);
+        return this;
+    }
+
+    public SnackBar refresh(){
+        this.doCalculatePosition();
         return this;
     }
 
@@ -276,16 +301,8 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
     public SnackBarPosition getPosition() {
         return position;
-    }
-
-    public int getMarginTop() {
-        return marginTop;
     }
 
     public SnackBar setMarginTop(int marginTop) {
@@ -293,17 +310,9 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    public int getMarginBottom() {
-        return marginBottom;
-    }
-
     public SnackBar setMarginBottom(int marginBottom) {
         this.marginBottom = marginBottom;
         return this;
-    }
-
-    public int getMarginLeft() {
-        return marginLeft;
     }
 
     public SnackBar setMarginLeft(int marginLeft) {
@@ -319,13 +328,37 @@ public class SnackBar extends JDialog {
         return this;
     }
 
+    public SnackBar setMarginRight(int marginRight) {
+        this.marginRight = marginRight;
+        return this;
+    }
+
+    public JLabel getSnackBarIconIcon(){
+        return snackBarContainer.getSnackBarIcon();
+    }
+
+    public int getMarginTop() {
+        return marginTop;
+    }
+
+    public int getMarginBottom() {
+        return marginBottom;
+    }
+
+    public int getMarginLeft() {
+        return marginLeft;
+    }
+
     public int getMarginRight() {
         return marginRight;
     }
 
-    public SnackBar setMarginRight(int marginRight) {
-        this.marginRight = marginRight;
-        return this;
+    public String getText(){
+        return this.snackBarContainer.getSnackBarText().getText();
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public boolean isRunning() {
@@ -335,6 +368,9 @@ public class SnackBar extends JDialog {
     public void dismiss() {
         this.running = false;
         super.setVisible(this.running);
+        if(this.showTimer != null){
+            this.showTimer.stop();
+        }
     }
 
     public SnackBar run() {
@@ -348,13 +384,14 @@ public class SnackBar extends JDialog {
             running = true;
             this.position = position;
             doCalculatePosition();
-
+            setVisible(true);
             if(duration == LENGTH_INDEFINITE){
-                setVisible(true);
                 return;
             }
-
-            new Thread(new Runnable() {
+            showTimer = new Timer(duration, new ActionShowSnackBar());
+            showTimer.start();
+            //TODO refactoring
+            /*new Thread(new Runnable() {
                 @Override
                 public void run() {
                     setVisible(true);
@@ -369,7 +406,7 @@ public class SnackBar extends JDialog {
                         running = false;
                     }
                 }
-            }).start();
+            }).start();*/
         }
     }
 
@@ -383,6 +420,14 @@ public class SnackBar extends JDialog {
         TOP_RIGHT(),
         BOTTOM_RIGHT(),
         BOTTOM_LEFT()
+    }
+
+    protected class ActionShowSnackBar extends AbstractAction{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dismiss();
+        }
     }
 
     protected class WindowEventDimensionChanged implements WindowStateListener {
