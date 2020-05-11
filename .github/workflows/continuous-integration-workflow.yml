@@ -1,7 +1,8 @@
 name: Publish SwingSnackBars to GitHub Packages
 on:
-  release:
-    types: [created]
+  create:
+    tags:
+      - v*
 jobs:
   publish:
     runs-on: ubuntu-latest
