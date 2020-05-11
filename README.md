@@ -47,6 +47,18 @@ Snackbar.make(contextView, R.string.item_removed_message, Snackbar.LENGTH_LONG)
 ```
 [Source](https://material.io/develop/android/components/snackbar/)
 
+## Package
+
+**Maven**
+
+<dependency>
+  <groupId>io.github.vincenzopalazzo</groupId>
+  <artifactId>SwingSnackBar</artifactId>
+  <version>0.0.1-rc1</version>
+</dependency>
+
+Look also [here](https://github.com/vincenzopalazzo/SwingSnackBar/packages)
+
 ## License
 
 <div align="center">
