@@ -49,7 +49,7 @@ Snackbar.make(contextView, R.string.item_removed_message, Snackbar.LENGTH_LONG)
 ## License
 
 <div align="center">
-  <img src="./resources/opensourcelicense.png" width="150" height="150"/>
+  <img src="https://opensource.org/files/osi_keyhole_300X300_90ppi_0.png" width="150" height="150"/>
 </div>
 
 Copyright (C) 2020 Vincenzo Palazzo vincenzopalazzodev@gmail.com
