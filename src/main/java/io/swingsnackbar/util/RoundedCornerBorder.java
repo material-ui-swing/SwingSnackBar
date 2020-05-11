@@ -1,4 +1,3 @@
-package io.swingsnackbar.util;
 /**
  * MIT License
  *
@@ -22,6 +21,8 @@ package io.swingsnackbar.util;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package io.swingsnackbar.util;
+
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import javax.swing.plaf.ColorUIResource;
