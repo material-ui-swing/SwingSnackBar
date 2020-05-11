@@ -29,8 +29,9 @@ SnackBar.make(frame, "Do you like Swing Snackbar?", "OPEN")
        }
      ).run();
 ```
-
 [Source code](https://github.com/vincenzopalazzo/SwingSnackBar/blob/master/src/test/java/io/swingsnackbar/DemoSnackBar.java)
+
+P.S: At the moment, the API can change, I want try to implement the same API of Android.
 
 ### Android
 
