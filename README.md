@@ -51,11 +51,19 @@ Snackbar.make(contextView, R.string.item_removed_message, Snackbar.LENGTH_LONG)
 
 **Maven**
 
+```xml
 <dependency>
   <groupId>io.github.vincenzopalazzo</groupId>
   <artifactId>SwingSnackBar</artifactId>
   <version>0.0.1-rc1</version>
 </dependency>
+```
+
+ _Gradle_
+
+```
+implementation 'io.github.vincenzopalazzo:SwingSnackBar:0.0.1-rc1'
+```
 
 Look also [here](https://github.com/vincenzopalazzo/SwingSnackBar/packages)
 
