@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.swingsnackbar.view;
+package org.material.component.swingsnackbar.view;
 
-import io.swingsnackbar.SnackBar;
-import io.swingsnackbar.model.SnackBarContainer;
+import org.material.component.swingsnackbar.SnackBar;
+import org.material.component.swingsnackbar.model.SnackBarContainer;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.BorderUIResource;

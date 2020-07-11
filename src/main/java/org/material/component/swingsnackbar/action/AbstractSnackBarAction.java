@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.swingsnackbar.action;
+package org.material.component.swingsnackbar.action;
 
 
 import java.awt.event.MouseEvent;

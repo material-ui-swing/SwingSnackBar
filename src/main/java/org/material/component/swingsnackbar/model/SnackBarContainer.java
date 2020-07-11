@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.swingsnackbar.model;
+package org.material.component.swingsnackbar.model;
 
-import io.swingsnackbar.action.AbstractSnackBarAction;
-import io.swingsnackbar.SnackBar;
-import io.swingsnackbar.view.BasicSnackBarUI;
+import org.material.component.swingsnackbar.action.AbstractSnackBarAction;
+import org.material.component.swingsnackbar.SnackBar;
+import org.material.component.swingsnackbar.view.BasicSnackBarUI;
 
 import javax.swing.*;
 import javax.swing.plaf.PanelUI;
@@ -34,7 +34,7 @@ import java.awt.*;
 /**
  * @author https://github.com/vincenzopalazzo
  */
-public class SnackBarContainer extends JPanel {
+public class SnackBarContainer extends JPanel{
 
     /**
      * With this code you can load the personal UI with Swing system call

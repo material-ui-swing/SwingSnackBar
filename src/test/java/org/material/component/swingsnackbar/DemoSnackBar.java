@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.swingsnackbar;
+package org.material.component.swingsnackbar;
 
-import io.swingsnackbar.action.AbstractSnackBarAction;
-import io.swingsnackbar.view.BasicSnackBarUI;
+import org.material.component.swingsnackbar.action.AbstractSnackBarAction;
+import org.material.component.swingsnackbar.twoactions.TwoActionSnackbar;
+import org.material.component.swingsnackbar.view.BasicSnackBarUI;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.MaterialLiteTheme;
@@ -90,13 +91,18 @@ public class DemoSnackBar extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("@vincenzopalazzo SnackBar");
-        snackBar = new SnackBar(frame, "Test SnackBar", icon);
+        snackBar = new TwoActionSnackbar(frame, "Test SnackBar", new JLabel("COPY"), new JLabel(icon));
     }
 
     protected void initActions() {
         openSnackBar.addActionListener(event -> {
             if (snackBar != null && !snackBar.isRunning()) {
-                snackBar = SnackBar.make(frame, "Do you like Swing Snackbar?", "OPEN")
+                snackBar = TwoActionSnackbar.make(frame, "Do you like Swing Snackbar?", "COPY",
+                        MaterialImageFactory.getInstance().getImage(
+                                GoogleMaterialDesignIcons.CLOSE,
+                                20,
+                                MaterialColors.COSMO_ORANGE
+                        ))
                         .setDuration(SnackBar.LENGTH_SHORT)
                         .setAction(new AbstractSnackBarAction() {
                                        @Override

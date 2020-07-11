@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.swingsnackbar;
+package org.material.component.swingsnackbar;
 
-import io.swingsnackbar.action.AbstractSnackBarAction;
-import io.swingsnackbar.model.SnackBarContainer;
+import org.material.component.swingsnackbar.action.AbstractSnackBarAction;
+import org.material.component.swingsnackbar.model.SnackBarContainer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -116,7 +116,7 @@ public class SnackBar extends JDialog {
         return new SnackBar(contextView, withMessage, icon);
     }
 
-    private SnackBarContainer snackBarContainer;
+    protected SnackBarContainer snackBarContainer;
     protected boolean running = false;
     protected int duration = LENGTH_INDEFINITE; //DEFAULT value
     protected SnackBarPosition position = SnackBarPosition.BOTTOM; //Default value
