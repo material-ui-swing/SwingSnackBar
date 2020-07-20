@@ -12,7 +12,7 @@
 - [How create custom style for component](https://github.com/vincenzopalazzo/SwingSnackBar/wiki/How-create-custom-style-for-component)
 - [How contribute](https://github.com/vincenzopalazzo/SwingSnackBar/wiki/How-contribute)
 - [Author](https://github.com/vincenzopalazzo/SwingSnackBar/wiki/Author)
-- [License]()
+- [License](https://github.com/material-ui-swing/SwingSnackBar/blob/master/LICENSE.md)
 
 ## Examples
 
@@ -65,7 +65,7 @@ Snackbar.make(contextView, R.string.item_removed_message, Snackbar.LENGTH_LONG)
 implementation 'io.github.material-ui-swing:SwingSnackBar:0.0.1-rc1'
 ```
 
-Look also [here](https://github.com/vincenzopalazzo/SwingSnackBar/packages)
+Look also [here](https://search.maven.org/search?q=io.github.material-ui-swing)
 
 ## License
 
