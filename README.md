@@ -53,7 +53,7 @@ Snackbar.make(contextView, R.string.item_removed_message, Snackbar.LENGTH_LONG)
 
 ```xml
 <dependency>
-  <groupId>io.github.vincenzopalazzo</groupId>
+  <groupId>io.github.material-ui-swing</groupId>
   <artifactId>SwingSnackBar</artifactId>
   <version>0.0.1-rc1</version>
 </dependency>
@@ -62,7 +62,7 @@ Snackbar.make(contextView, R.string.item_removed_message, Snackbar.LENGTH_LONG)
  _Gradle_
 
 ```
-implementation 'io.github.vincenzopalazzo:SwingSnackBar:0.0.1-rc1'
+implementation 'io.github.material-ui-swing:SwingSnackBar:0.0.1-rc1'
 ```
 
 Look also [here](https://github.com/vincenzopalazzo/SwingSnackBar/packages)
