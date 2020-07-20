@@ -1,5 +1,5 @@
 # SwingSnackBar
-
+![Maven Central](https://img.shields.io/maven-central/v/io.github.material-ui-swing/SwingSnackBar?style=for-the-badge)
 <div align="center">
  <img src="https://i.ibb.co/f82msmc/Swing-Snack-Bar-ICON.png" alt="Swing-Snack-Bar-ICON">
  <p align="center">Swing SnackBar component</p>
