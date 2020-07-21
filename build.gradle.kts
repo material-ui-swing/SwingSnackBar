@@ -4,20 +4,35 @@ plugins {
     signing
 }
 
-group = "io.github.material-ui-swing"
+group = project.property("GROUP_ID")!!
 version = project.property("PROJECT_VERSION")!!
 
 repositories {
     jcenter()
-    maven("https://repo.maven.apache.org/maven2/")
 }
 
 dependencies {
-    //implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.1-rc2")
     testImplementation(files("$projectDir/devlib/LinkLabelUI.jar"))
-    testImplementation(files("$projectDir/devlib/material-ui-swing-1.1.1-rc3.jar"))
+    testImplementation("io.github.vincenzopalazzo:material-ui-swing:1.1.1-rc4")
+}
+/*
+plugins.withType<JavaPlugin>().configureEach {
+    configure<JavaPluginExtension> {
+        modularity.inferModulePath.set(true)
+    }
 }
 
+java {
+    modularity.inferModulePath.set(true)
+}
+*/
+//TODO I'm using this because I will create a Multi-Release JAR Files
+//https://openjdk.java.net/jeps/238
+tasks.jar {
+    manifest {
+        attributes("Automatic-Module-Name" to project.property("MODULE_NAME").toString())
+    }
+}
 tasks{
     create<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
@@ -27,6 +42,19 @@ tasks{
     create<Jar>("javadocJar") {
         archiveClassifier.set("javadoc")
         from(sourceSets["main"].allSource)
+    }
+
+    withType<JavaCompile>().configureEach {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+        options.encoding = "ISO-8859-1"
+    }
+
+    withType<Jar>().configureEach {
+        // add META-INF/LICENSE to all created JARs
+        from("${rootDir}/LICENSE") {
+            into("META-INF")
+        }
     }
 }
 
