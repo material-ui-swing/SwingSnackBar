@@ -12,8 +12,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation(files("$projectDir/devlib/LinkLabelUI.jar"))
+    testImplementation("io.github.material-ui-swing:LinkLabelUI:0.0.1-rc1")
     testImplementation("io.github.vincenzopalazzo:material-ui-swing:1.1.1-rc4")
+    testImplementation("com.github.jiconfont:jiconfont-google_material_design_icons:2.2.0.2")
 }
 /*
 plugins.withType<JavaPlugin>().configureEach {
