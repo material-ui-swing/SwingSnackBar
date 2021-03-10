@@ -59,9 +59,9 @@ public class TwoActionSnackbar extends SnackBar {
         super(frame, message, icon);
         super.snackBarContainer = new TwoActionContainer(this, new JLabel(message), icon, secondIcon);
         super.snackBarContainer.inflateContent();
-        super.snackBarContainer.updateUI();
+        ((JComponent) super.snackBarContainer).updateUI();
         super.revalidate();
-        super.setContentPane(super.snackBarContainer);
+        super.setContentPane((Container) super.snackBarContainer);
 
     }
 

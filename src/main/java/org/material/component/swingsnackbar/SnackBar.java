@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2019-2020 Vincenzo Palazzo vincenzopalazzo1996@gmail.com
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,6 +24,7 @@
 package org.material.component.swingsnackbar;
 
 import org.material.component.swingsnackbar.action.AbstractSnackBarAction;
+import org.material.component.swingsnackbar.model.ISnackBarContainer;
 import org.material.component.swingsnackbar.model.SnackBarContainer;
 
 import javax.swing.*;
@@ -57,16 +58,16 @@ public class SnackBar extends JDialog {
     protected static int WINDOW_RADIUS = UIManager.getInt("SnackBar.arc");
 
     public static SnackBar make(Window contextView, String withMessage, String iconText) {
-        if(contextView == null || (withMessage == null || withMessage.isEmpty())){
+        if (contextView == null || (withMessage == null || withMessage.isEmpty())) {
             String message = "\n";
-            if(contextView == null){
+            if (contextView == null) {
                 message = "- Context View null, this propriety should be an instance of Window swing component\n";
             }
-            if((withMessage == null || withMessage.isEmpty())){
-                if(withMessage == null){
+            if ((withMessage == null || withMessage.isEmpty())) {
+                if (withMessage == null) {
                     message = "- The message is null, this propriety should be contains any " +
                             "text because is the text content inside the Snackbar\n";
-                }else{
+                } else {
                     message = "- The message is empty, this propriety should be contains any " +
                             "text because is the text content inside the Snackbar\n";
                 }
@@ -77,16 +78,16 @@ public class SnackBar extends JDialog {
     }
 
     public static SnackBar make(Window contextView, String withMessage, JLabel labelWithIconOrText) {
-        if(contextView == null || (withMessage == null || withMessage.isEmpty())){
+        if (contextView == null || (withMessage == null || withMessage.isEmpty())) {
             String message = "\n";
-            if(contextView == null){
+            if (contextView == null) {
                 message = "- Context View null, this propriety should be an instance of Window swing component\n";
             }
-            if((withMessage == null || withMessage.isEmpty())){
-                if(withMessage == null){
+            if ((withMessage == null || withMessage.isEmpty())) {
+                if (withMessage == null) {
                     message = "- The message is null, this propriety should be contains any " +
                             "text because is the text content inside the Snackbar\n";
-                }else{
+                } else {
                     message = "- The message is empty, this propriety should be contains any " +
                             "text because is the text content inside the Snackbar\n";
                 }
@@ -97,16 +98,16 @@ public class SnackBar extends JDialog {
     }
 
     public static SnackBar make(Window contextView, String withMessage, Icon icon) {
-        if(contextView == null || (withMessage == null || withMessage.isEmpty())){
+        if (contextView == null || (withMessage == null || withMessage.isEmpty())) {
             String message = "\n";
-            if(contextView == null){
+            if (contextView == null) {
                 message = "- Context View null, this propriety should be an instance of Window swing component\n";
             }
-            if((withMessage == null || withMessage.isEmpty())){
-                if(withMessage == null){
+            if ((withMessage == null || withMessage.isEmpty())) {
+                if (withMessage == null) {
                     message = "- The message is null, this propriety should be contains any " +
                             "text because is the text content inside the Snackbar\n";
-                }else{
+                } else {
                     message = "- The message is empty, this propriety should be contains any " +
                             "text because is the text content inside the Snackbar\n";
                 }
@@ -116,7 +117,7 @@ public class SnackBar extends JDialog {
         return new SnackBar(contextView, withMessage, icon);
     }
 
-    protected SnackBarContainer snackBarContainer;
+    protected ISnackBarContainer snackBarContainer;
     protected boolean running = false;
     protected int duration = LENGTH_INDEFINITE; //DEFAULT value
     protected SnackBarPosition position = SnackBarPosition.BOTTOM; //Default value
@@ -136,19 +137,35 @@ public class SnackBar extends JDialog {
 
     public SnackBar(Window frame, String message, JLabel icon) {
         super(frame);
-        this.snackBarContainer = new SnackBarContainer(this, new JLabel(message), icon);
+        this.snackBarContainer = this.getSnackBarContainer(message, icon);
         this.snackBarContainer.inflateContent();
-        super.setContentPane(snackBarContainer);
-        setModal(false);
-        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
-        initStyle();
-        super.getOwner().addWindowStateListener(new WindowEventDimensionChanged());
+        this.inflateSnackBar();
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        Graphics2D graphics2D = (Graphics2D) g;
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        super.paint(graphics2D);
     }
 
     @Override
     public void revalidate() {
         super.revalidate();
         this.setPersonalDimension();
+    }
+
+    protected void inflateSnackBar() {
+        super.setContentPane((Container) snackBarContainer);
+        setModal(false);
+        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        initStyle();
+        super.getOwner().addWindowStateListener(new WindowEventDimensionChanged());
+    }
+
+    protected ISnackBarContainer getSnackBarContainer(String message, JLabel icon) {
+        return new SnackBarContainer(this, new JLabel(message), icon);
     }
 
     /**
@@ -172,12 +189,12 @@ public class SnackBar extends JDialog {
                 ? new ColorUIResource(55, 58, 60)
                 : UIManager.getColor("SnackBar.background");
         setBackground(background);
-        setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         getRootPane().setBackground(background);
-        getRootPane().setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        getRootPane().setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 
-    protected void setPersonalDimension(){
+    protected void setPersonalDimension() {
         Dimension dimension = this.snackBarContainer.getDimension();
         setPreferredSize(dimension);
         setMinimumSize(dimension);
@@ -238,8 +255,6 @@ public class SnackBar extends JDialog {
     }
 
     protected boolean isPossibleWith() {
-        //System.out.println("Root wight: " + getOwner().getWidth());
-        //System.out.println("SnackBar wight: " + this.getWidth() * 2);
         return getOwner().getWidth() > (this.getWidth() * 2);
     }
 
@@ -260,14 +275,14 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    public SnackBar setSnackBarBackground(Color color){
+    public SnackBar setSnackBarBackground(Color color) {
         super.setBackground(color);
         super.getRootPane().setBackground(color);
         this.snackBarContainer.setBackground(color);
         return this;
     }
 
-    public SnackBar setSnackBarForeground(Color color){
+    public SnackBar setSnackBarForeground(Color color) {
         this.snackBarContainer.getSnackBarText().setForeground(color);
         return this;
     }
@@ -280,8 +295,8 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    public SnackBar setIconTextStyle(Font font){
-        if(font == null){
+    public SnackBar setIconTextStyle(Font font) {
+        if (font == null) {
             throw new IllegalArgumentException("- Font null\n");
         }
         this.snackBarContainer.setIconTextStyle(font);
@@ -293,7 +308,7 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    protected SnackBar getInstance(){
+    protected SnackBar getInstance() {
         return this;
     }
 
@@ -305,18 +320,18 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    public SnackBar refresh(){
+    public SnackBar refresh() {
         this.doCalculatePosition();
         return this;
     }
 
-   public SnackBar setIconTextColor(Color color){
-        if(color == null){
+    public SnackBar setIconTextColor(Color color) {
+        if (color == null) {
             throw new IllegalArgumentException("- Color is null\n");
         }
         this.snackBarContainer.setIconTextColor(color);
         return this;
-   }
+    }
 
     public SnackBar setPosition(SnackBarPosition position) {
         this.position = position;
@@ -343,8 +358,8 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    public SnackBar setGap(int gap){
-        if(gap < 0){
+    public SnackBar setGap(int gap) {
+        if (gap < 0) {
             throw new IllegalArgumentException("\n- Gap should be positive or equal to 0");
         }
         this.snackBarContainer.setGap(gap);
@@ -356,7 +371,7 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    public JLabel getSnackBarIconIcon(){
+    public JLabel getSnackBarIconIcon() {
         return snackBarContainer.getSnackBarIcon();
     }
 
@@ -376,7 +391,7 @@ public class SnackBar extends JDialog {
         return marginRight;
     }
 
-    public String getText(){
+    public String getText() {
         return this.snackBarContainer.getSnackBarText().getText();
     }
 
@@ -391,7 +406,7 @@ public class SnackBar extends JDialog {
     public void dismiss() {
         this.running = false;
         super.setVisible(this.running);
-        if(this.showTimer != null){
+        if (this.showTimer != null) {
             this.showTimer.stop();
         }
     }
@@ -401,41 +416,20 @@ public class SnackBar extends JDialog {
         return this;
     }
 
-    //TODO refactoring with timer and not with a Thread
     public void run(SnackBarPosition position) {
         if (!running) {
             running = true;
             this.position = position;
             doCalculatePosition();
             setVisible(true);
-            if(duration == LENGTH_INDEFINITE){
+            if (duration == LENGTH_INDEFINITE) {
                 return;
             }
             showTimer = new Timer(duration, new ActionShowSnackBar());
             showTimer.start();
-            //TODO refactoring
-            /*new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    setVisible(true);
-                    try {
-                        Thread.sleep(duration);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    //If isn't call dismiss method before to end
-                    if (isVisible()) {
-                        setVisible(false);
-                        running = false;
-                    }
-                }
-            }).start();*/
         }
     }
 
-    /**
-     * Default SnackBar position.
-     */
     protected enum SnackBarPosition {
         TOP(),
         BOTTOM(),
@@ -445,7 +439,7 @@ public class SnackBar extends JDialog {
         BOTTOM_LEFT()
     }
 
-    protected class ActionShowSnackBar extends AbstractAction{
+    protected class ActionShowSnackBar extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent e) {

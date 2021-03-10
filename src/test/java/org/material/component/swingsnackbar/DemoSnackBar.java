@@ -23,16 +23,15 @@
  */
 package org.material.component.swingsnackbar;
 
-import org.material.component.swingsnackbar.action.AbstractSnackBarAction;
-import org.material.component.swingsnackbar.twoactions.TwoActionSnackbar;
-import org.material.component.swingsnackbar.view.BasicSnackBarUI;
-import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
-import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.MaterialLiteTheme;
+import mdlaf.utils.icons.MaterialIconFont;
+import org.material.component.swingsnackbar.action.AbstractSnackBarAction;
+import org.material.component.swingsnackbar.jmars.JMarsSnackBar;
+import org.material.component.swingsnackbar.view.BasicSnackBarUI;
+import mdlaf.MaterialLookAndFeel;
 import mdlaf.utils.MaterialColors;
 import mdlaf.utils.MaterialImageFactory;
 import javax.swing.*;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -45,11 +44,10 @@ public class DemoSnackBar extends JFrame {
         try {
             UIManager.put("SnackBarUI", BasicSnackBarUI.class.getCanonicalName());
             JDialog.setDefaultLookAndFeelDecorated(true);
-            JFrame.setDefaultLookAndFeelDecorated(true);
-            UIManager.put("SnackBar.arc", 0);
+            JFrame.setDefaultLookAndFeelDecorated(false);
+            UIManager.put("SnackBar.arc", 8);
             UIManager.put("SnackBar.background", MaterialColors.COSMO_BLACK);
-            UIManager.put("SnackBar.foreground", MaterialColors.WHITE);
-            UIManager.put("SnackBar.border", new BorderUIResource(BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+            UIManager.put("SnackBar.foreground", MaterialColors.COSMO_DARK_GRAY);
             UIManager.setLookAndFeel(new MaterialLookAndFeel(new MaterialLiteTheme()));
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
@@ -58,10 +56,10 @@ public class DemoSnackBar extends JFrame {
 
     private JFrame frame = this;
     private JButton openSnackBar;
+    private JButton openJMarsSnackBar;
     private SnackBar snackBar;
 
-    private DemoSnackBar() {
-    }
+    private DemoSnackBar() { }
 
     public void initView() {
         initComponents();
@@ -76,13 +74,14 @@ public class DemoSnackBar extends JFrame {
     }
 
     protected void initComponents() {
-        setLayout(new BorderLayout());
-        add(new JToggleButton());
+        setLayout(new GridLayout(2, 1));
+        openJMarsSnackBar = new JButton("Open JMars SnackBar");
         openSnackBar = new JButton("Open SnackBar");
-        add(openSnackBar, BorderLayout.SOUTH);
+        add(openJMarsSnackBar);
+        add(openSnackBar);
 
         Icon icon = MaterialImageFactory.getInstance().getImage(
-                GoogleMaterialDesignIcons.DELETE,
+                MaterialIconFont.DELETE,
                 MaterialColors.PURPLE_500
         );
         setSize(new Dimension(450, 550));
@@ -91,37 +90,61 @@ public class DemoSnackBar extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("@vincenzopalazzo SnackBar");
-        snackBar = new TwoActionSnackbar(frame, "Test SnackBar", new JLabel("COPY"), new JLabel(icon));
+        snackBar = new JMarsSnackBar(frame, "Test SnackBar", new JLabel(icon));
     }
 
     protected void initActions() {
+        openJMarsSnackBar.addActionListener(event -> {
+            if (snackBar != null && !snackBar.isRunning()) {
+                Icon closeIcon = MaterialImageFactory.getInstance().getImage(
+                        MaterialIconFont.CLOSE,
+                        20,
+                        MaterialColors.COSMO_DARK_GRAY
+                );
+                snackBar = SnackBar.make(frame, "WoW! A new SnackBar for Java Swing", closeIcon)
+                        .setDuration(SnackBar.LENGTH_INDEFINITE)
+                        .setPosition(SnackBar.TOP)
+                        .setAction(new AbstractSnackBarAction() {
+                            @Override
+                            public void mousePressed(MouseEvent e) {
+                                snackBar.dismiss();
+                            }
+                        })
+                        .run();
+            }
+        });
+
         openSnackBar.addActionListener(event -> {
             if (snackBar != null && !snackBar.isRunning()) {
-                snackBar = TwoActionSnackbar.make(frame, "Do you like Swing Snackbar?", "COPY",
-                        MaterialImageFactory.getInstance().getImage(
-                                GoogleMaterialDesignIcons.CLOSE,
-                                20,
-                                MaterialColors.COSMO_ORANGE
-                        ))
-                        .setDuration(SnackBar.LENGTH_SHORT)
+                Icon closeIcon = MaterialImageFactory.getInstance().getImage(
+                        MaterialIconFont.CLOSE,
+                        20,
+                        MaterialColors.COSMO_DARK_GRAY
+                );
+                Icon androidIcon = MaterialImageFactory.getInstance().getImage(
+                        MaterialIconFont.ANDROID,
+                        20,
+                        MaterialColors.COSMO_DARK_GRAY
+                );
+                snackBar = JMarsSnackBar.make(frame, "Oh! It is the same of the Android Component", closeIcon)
+                        .setLeftIcon(androidIcon) // This need to be here because the make return the correct instance type, this help to avoid the cast
+                        .setDuration(SnackBar.LENGTH_INDEFINITE)
+                        .setPosition(SnackBar.TOP)
                         .setAction(new AbstractSnackBarAction() {
                                        @Override
                                        public void mousePressed(MouseEvent e) {
-                                           System.out.println("Hello SnackBar");
+                                          snackBar.dismiss();
                                        }
-                                   }
-                        ).run();
+                                   })
+                        .run();
             }
         });
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                DemoSnackBar demo = new DemoSnackBar();
-                demo.initView();
-            }
+        SwingUtilities.invokeLater(() -> {
+            DemoSnackBar demo = new DemoSnackBar();
+            demo.initView();
         });
     }
 }
