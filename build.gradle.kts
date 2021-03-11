@@ -33,6 +33,7 @@ tasks.jar {
         attributes("Automatic-Module-Name" to project.property("MODULE_NAME").toString())
     }
 }
+/*
 tasks{
     create<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
@@ -116,3 +117,4 @@ signing {
     sign(tasks["sourcesJar"], tasks["javadocJar"])
     sign(publishing.publications["SwingSnackBar"])
 }
+ */
