@@ -122,7 +122,7 @@ public class DemoSnackBar extends JFrame {
                 JMarsSnackBar.make(frame, "Oh! It is the same of the Android Component", closeIcon)
                     .setLeftIcon(
                         androidIcon) // This need to be here because the make return the correct
-                                     // instance type, this help to avoid the cast
+                    // instance type, this help to avoid the cast
                     .setDuration(SnackBar.LENGTH_INDEFINITE)
                     .setPosition(SnackBar.TOP)
                     .setAction(
