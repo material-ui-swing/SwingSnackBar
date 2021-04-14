@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     testImplementation("io.github.material-ui-swing:LinkLabelUI:0.0.1-rc1")
-    testImplementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2-rc1")
+    testImplementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2-rc2")
 }
 
 /*
