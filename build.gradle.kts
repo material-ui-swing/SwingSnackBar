@@ -2,6 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+    id("com.github.sherter.google-java-format") version "0.9"
 }
 
 group = project.property("GROUP_ID")!!
@@ -15,6 +16,7 @@ dependencies {
     testImplementation("io.github.material-ui-swing:LinkLabelUI:0.0.1-rc1")
     testImplementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2-rc1")
 }
+
 /*
 plugins.withType<JavaPlugin>().configureEach {
     configure<JavaPluginExtension> {
@@ -26,6 +28,7 @@ java {
     modularity.inferModulePath.set(true)
 }
 */
+
 //TODO I'm using this because I will create a Multi-Release JAR Files
 //https://openjdk.java.net/jeps/238
 tasks.jar {
@@ -33,7 +36,7 @@ tasks.jar {
         attributes("Automatic-Module-Name" to project.property("MODULE_NAME").toString())
     }
 }
-/*
+
 tasks{
     create<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
@@ -52,7 +55,6 @@ tasks{
     }
 
     withType<Jar>().configureEach {
-        // add META-INF/LICENSE to all created JARs
         from("${rootDir}/LICENSE") {
             into("META-INF")
         }
@@ -70,8 +72,8 @@ publishing {
             repositories {
                 maven {
                     credentials {
-                        username = project.property("sonatypeUsername").toString()
-                        password = project.property("sonatypePassword").toString()
+                        username = System.getenv("MAVEN_USERNAME")
+                        password = System.getenv("MAVEN_PASSWORD")
                     }
                     val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                     val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
@@ -117,4 +119,3 @@ signing {
     sign(tasks["sourcesJar"], tasks["javadocJar"])
     sign(publishing.publications["SwingSnackBar"])
 }
- */
