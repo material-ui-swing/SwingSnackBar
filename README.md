@@ -1,9 +1,12 @@
 # SwingSnackBar
-![Maven Central](https://img.shields.io/maven-central/v/io.github.material-ui-swing/SwingSnackBar?style=for-the-badge)
+
 <div align="center">
  <img src="https://i.ibb.co/f82msmc/Swing-Snack-Bar-ICON.png" alt="Swing-Snack-Bar-ICON">
  <p align="center">Swing SnackBar component</p>
 </div>
+
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/material-ui-swing/SwingSnackBar/build?style=flat-square)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.material-ui-swing/SwingSnackBar?style=flat-square)
 
 ## Overview
 
@@ -55,14 +58,14 @@ Snackbar.make(contextView, R.string.item_removed_message, Snackbar.LENGTH_LONG)
 <dependency>
   <groupId>io.github.material-ui-swing</groupId>
   <artifactId>SwingSnackBar</artifactId>
-  <version>0.0.1-rc2</version>
+  <version>0.0.2</version>
 </dependency>
 ```
 
  _Gradle_
 
 ```
-implementation 'io.github.material-ui-swing:SwingSnackBar:0.0.1-rc2'
+implementation 'io.github.material-ui-swing:SwingSnackBar:0.0.2'
 ```
 
 Look also [here](https://search.maven.org/search?q=io.github.material-ui-swing)
